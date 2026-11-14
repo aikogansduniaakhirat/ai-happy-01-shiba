@@ -106,10 +106,16 @@ def main():
     for px in (hx - hr * 0.42, hx + hr * 0.42):
         d.ellipse([px - S * 0.035, scy - S * 0.16, px + S * 0.035, scy - S * 0.16 + S * 0.07], fill=(245, 185, 120))
 
-    # downscale for clean edges
+    # happy sparkles around
+    sparkles = [(0.2, 0.2), (0.8, 0.22), (0.15, 0.6), (0.85, 0.58), (0.5, 0.12)]
+    for sx, sy in sparkles:
+        glow(d, S * sx, S * sy, S * 0.04, (255, 255, 220), steps=6)
+
+    # downscale for clean edges with Lanczos filter
     img = img.resize((W, H), Image.LANCZOS)
     os.makedirs(os.path.dirname(OUT), exist_ok=True)
-    img.save(OUT, "PNG")
+    img.save(OUT, "PNG", optimize=True)
     print("wrote", OUT, img.size, os.path.getsize(OUT), "bytes")
 
-main()
+if __name__ == "__main__":
+    main()
